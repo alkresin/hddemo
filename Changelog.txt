@@ -1,4 +1,8 @@
 
+2015-04-01 20:48 UTC+0300 Alexander Kresin <alex@belacy.ru>
+  * src/main.prg
+    * Some styling added
+
 2015-04-01 16:34 UTC+0300 Alexander Kresin <alex@belacy.ru>
   * src/main.prg
     * Login dialog sample added.

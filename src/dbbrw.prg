@@ -4,6 +4,7 @@
 FUNCTION DbfBrowse()
 
    LOCAL oWnd, oLayV, oLayH, oBrw, oBtn1, oBtn2, cPath
+   LOCAL oStyleN, oStyleP
    LOCAL i, arr := {"Petr","Fedor","Alexander","Viktor","Nikolay","Ivan","Anton", ;
       "Boris","Alexey","Andrey","Konstantin","Oleg","Igor","Pavel","Sergey","Mikhail","Dmitry", ;
       "Artem","Nikita","Ilya","Vladimir","Vyacheslav","Efim","Lev","Roman","Semen","Miron","Matvey","Leonid"}
@@ -15,6 +16,9 @@ FUNCTION DbfBrowse()
    MENU
       MENUITEM "Exit" ACTION hd_calljava_s_v("finish:")
    ENDMENU
+
+   INIT STYLE oStyleN COLORS "#7FA40E", "#B7EF8E" ORIENT 1 CORNERS 8
+   INIT STYLE oStyleP COLORS "#7FA40E", "#79C83F" ORIENT 6 CORNERS 8
 
    BEGIN LAYOUT oLayV SIZE MATCH_PARENT,MATCH_PARENT
 
@@ -51,6 +55,7 @@ FUNCTION DbfBrowse()
 
       BUTTON oBtn1 TEXT "Add record" SIZE 0, MATCH_PARENT ;
             ON CLICK {||EditRec( oBrw,.T. )}
+      oBtn1:oStyle := {oStyleN,,oStyleP}
       oBtn1:nMarginL := oBtn1:nMarginR := 12
       oBtn1:nMarginT := 4
       oBtn1:nMarginB := 2
@@ -67,6 +72,7 @@ STATIC FUNCTION EditRec( oBrw,lNew )
 
    LOCAL oWnd, oLayV, oBtn1, oBtn2, oBtn3, oEdit1, oEdit2, oEdit3, oEdit4
    LOCAL nRec := Iif( lNew, 0, (oBrw:data)->( RecNo() ) ), lUpd := .F.
+   LOCAL oBtn := Atail(HDWindow():aWindows):FindByName( "OBTN1" ), aStyle := oBtn:oStyle
 
    INIT WINDOW oWnd TITLE Iif( lNew, "Add record", "Edit record" )
 
@@ -82,15 +88,18 @@ STATIC FUNCTION EditRec( oBrw,lNew )
       oLayH:nMarginT := 24
       BUTTON oBtn1 TEXT Iif( lNew, "Add&Close", "Update" ) SIZE 0, MATCH_PARENT ;
             ON CLICK {||Addrec(oBrw,nRec,oEdit1,oEdit2,oEdit3,oEdit4),Iif(lNew,oBrw:Refresh(),oBrw:RefreshRow()),hd_calljava_s_v("finish:")}
+      oBtn1:oStyle := aStyle
       oBtn1:nMarginL := oBtn1:nMarginR := 8
 
       IF lNew
          BUTTON oBtn2 TEXT "Add" SIZE 0, MATCH_PARENT ;
                ON CLICK {||Addrec(oBrw,0,oEdit1,oEdit2,oEdit3,oEdit4),CleanForm(oEdit1,oEdit2,oEdit3,oEdit4),lUpd := .T.}
+         oBtn2:oStyle := aStyle
       ENDIF
 
       BUTTON oBtn3 TEXT "Close" SIZE 0, MATCH_PARENT ;
             ON CLICK {||Iif(lUpd,oBrw:Refresh(),.F.),hd_calljava_s_v("finish:")}
+      oBtn3:oStyle := aStyle
       oBtn3:nMarginL := oBtn3:nMarginR := 8
 
    END LAYOUT oLayH
