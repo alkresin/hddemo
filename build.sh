@@ -4,11 +4,11 @@
 
 ./clear.sh
 
-$HRB_BIN/harbour src/main.prg -q -i$HRB_INC -i$HDROIDGUI/src/include -i$HRB_INC -ojni/
+$HRB_BIN/harbour src/main.prg src/calc.prg src/dbbrw.prg -q -i$HRB_INC -i$HDROIDGUI/src/include -i$HRB_INC -ojni/
 if [ "$?" -eq 0 ]
 then
 export NDK_LIBS_OUT=lib
-export SRC_FILES=main.c
+export SRC_FILES="main.c calc.c dbbrw.c"
 $NDK_HOME/prebuilt/linux-x86/bin/make -f $NDK_HOME/build/core/build-local.mk "$@" >a1.out 2>a2.out
   if [ "$?" -eq 0 ]
   then

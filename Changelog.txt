@@ -1,3 +1,9 @@
 
+2015-04-01 13:48 UTC+0300 Alexander Kresin <alex@belacy.ru>
+  * src/main.prg
+  + src/calc.prg
+  + src/dbbrw.prg
+    * two samples added from hdcalcul and hddbf
+
 2015-04-01 12:50 UTC+0300 Alexander Kresin <alex@belacy.ru>
   * Initial commit
