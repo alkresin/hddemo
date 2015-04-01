@@ -5,7 +5,9 @@ FUNCTION HDroidMain( lFirst )
 
    LOCAL oWnd, oLayV, oBrw
    LOCAL aSamples := { ;
-      { " Calculator", {||Calcul()} }, { " Dbf Browse", {||dbfBrowse()} } }
+      { " Calculator", {||Calcul()} }, { " Dbf Browse", {||dbfBrowse()} }, ;
+      { " Progress dialog", {||pdDialog()} }, { " Photo", {||Photo()} } ;
+   }
 
    INIT WINDOW oWnd TITLE "HDroidGUI Demo"
 
@@ -27,3 +29,62 @@ FUNCTION HDroidMain( lFirst )
 
    RETURN Nil
 
+STATIC Function pdDialog()
+
+   hd_Progress( @thfunc(), "Progress dialog", "Wait..." )
+   RETURN Nil
+
+STATIC FUNCTION thfunc( oTimer )
+
+   LOCAL nSec := Seconds()
+
+   DO WHILE Seconds() - nSec < 4
+   ENDDO
+   hd_ThreadClosed( oTimer )
+
+   RETURN Nil
+
+STATIC Function Photo()
+
+   LOCAL oWnd, oLayV, oBtn1, oImage
+   LOCAL bExit := {||
+      IF !Empty( oImage:cargo )
+         hd_MsgYesNo( "Erase photo?", {|o|Iif(o:nres==1,delPhoto(oImage),.t.)} )
+      ENDIF
+      Return .T.
+   }
+
+   INIT WINDOW oWnd TITLE "Photo" ON EXIT bExit
+
+   MENU
+      MENUITEM "Exit" ACTION hd_calljava_s_v("finish:")
+   ENDMENU
+
+   BEGIN LAYOUT oLayV SIZE MATCH_PARENT,MATCH_PARENT
+
+   IMAGEVIEW oImage BACKCOLOR "#C7C7C7" SIZE MATCH_PARENT,0
+
+   BUTTON oBtn1 TEXT "Take photo" SIZE MATCH_PARENT, WRAP_CONTENT ;
+         ON CLICK {||takePhoto(oImage)}
+   oBtn1:nMarginL := oBtn1:nMarginR := 12
+   oBtn1:nMarginT := 4
+   oBtn1:nMarginB := 2
+
+   END LAYOUT oLayV
+
+   ACTIVATE WINDOW oWnd
+
+   RETURN Nil
+
+STATIC Function takePhoto( oImage )
+
+   LOCAL b1 := {|s| oImage:cargo := s, oImage:SetImage(s) }
+
+   hd_takePhoto( ,"demo_1", b1 )
+
+   RETURN Nil
+
+STATIC Function delPhoto( oImage )
+
+   FErase( oImage:cargo )
+   RETURN Nil

@@ -1,4 +1,8 @@
 
+2015-04-01 15:24 UTC+0300 Alexander Kresin <alex@belacy.ru>
+  * src/main.prg
+    * Progress dialog and Photo samples added.
+
 2015-04-01 13:48 UTC+0300 Alexander Kresin <alex@belacy.ru>
   * src/main.prg
   + src/calc.prg
