@@ -6,7 +6,8 @@ FUNCTION HDroidMain( lFirst )
    LOCAL oWnd, oLayV, oBrw
    LOCAL aSamples := { ;
       { " Calculator", {||Calcul()} }, { " Dbf Browse", {||dbfBrowse()} }, ;
-      { " Progress dialog", {||pdDialog()} }, { " Photo", {||Photo()} } ;
+      { " Progress dialog", {||pdDialog()} }, { " Photo", {||Photo()} }, ;
+      { " Login  dialog", {||LoginDlg()} } ;
    }
 
    INIT WINDOW oWnd TITLE "HDroidGUI Demo"
@@ -87,4 +88,27 @@ STATIC Function takePhoto( oImage )
 STATIC Function delPhoto( oImage )
 
    FErase( oImage:cargo )
+   RETURN Nil
+
+STATIC FUNCTION LoginDlg()
+
+   LOCAL oDlg, oEdit1, oEdit2, oEdit3, oBtnYes, oBtnNo
+   LOCAL bExit := {|o|
+      IF o:nRes == 1
+         hd_Toast( "Login info:" + Chr(10) + o:aRes[1] + Chr(10) + o:aRes[2] + Chr(10) + o:aRes[3] )
+      ENDIF
+      Return .T.
+   }
+
+   INIT DIALOG oDlg TITLE "Login" ON EXIT bExit
+
+   EDITBOX oEdit1 HINT "Server address"
+   EDITBOX oEdit2 HINT "Login name"
+   EDITBOX oEdit3 HINT "Password" PASSWORD
+
+   BUTTON oBtnYes TEXT "Ok"
+   BUTTON oBtnNo TEXT "Cancel"
+
+   ACTIVATE DIALOG oDlg
+
    RETURN Nil

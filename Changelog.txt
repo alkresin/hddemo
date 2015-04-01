@@ -1,4 +1,8 @@
 
+2015-04-01 16:34 UTC+0300 Alexander Kresin <alex@belacy.ru>
+  * src/main.prg
+    * Login dialog sample added.
+
 2015-04-01 15:24 UTC+0300 Alexander Kresin <alex@belacy.ru>
   * src/main.prg
     * Progress dialog and Photo samples added.
