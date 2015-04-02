@@ -72,7 +72,7 @@ STATIC FUNCTION EditRec( oBrw,lNew )
 
    LOCAL oWnd, oLayV, oBtn1, oBtn2, oBtn3, oEdit1, oEdit2, oEdit3, oEdit4
    LOCAL nRec := Iif( lNew, 0, (oBrw:data)->( RecNo() ) ), lUpd := .F.
-   LOCAL oBtn := Atail(HDWindow():aWindows):FindByName( "OBTN1" ), aStyle := oBtn:oStyle
+   LOCAL aStyle := hd_getCurrWindow():oBtn1:oStyle
 
    INIT WINDOW oWnd TITLE Iif( lNew, "Add record", "Edit record" )
 
