@@ -7,7 +7,7 @@ FUNCTION HDroidMain( lFirst )
    LOCAL aSamples := { ;
       { " Calculator", {||Calcul()} }, { " Dbf Browse", {||dbfBrowse()} }, ;
       { " Progress dialog", {||pdDialog()} }, { " Photo", {||Photo()} }, ;
-      { " Login  dialog", {||LoginDlg()} } ;
+      { " Login  dialog", {||LoginDlg()} }, { " External hrb module", {||ExtMod()} } ;
    }
 
    INIT WINDOW oWnd TITLE "HDroidGUI Demo"
@@ -32,7 +32,7 @@ FUNCTION HDroidMain( lFirst )
 
 STATIC Function pdDialog()
 
-   hd_Progress( @thfunc(), "Progress dialog", "Wait..." )
+   hd_Progress( @thfunc(), "Progress dialog", "Wait...",{||hd_toast("Done!")} )
    RETURN Nil
 
 STATIC FUNCTION thfunc( oTimer )
@@ -47,13 +47,16 @@ STATIC FUNCTION thfunc( oTimer )
 
 STATIC Function Photo()
 
-   LOCAL oWnd, oLayV, oBtn1, oImage
+   LOCAL oWnd, oLayV, oBtn1, oImage, oStyleN, oStyleP
    LOCAL bExit := {||
       IF !Empty( oImage:cargo )
          hd_MsgYesNo( "Erase photo?", {|o|Iif(o:nres==1,delPhoto(oImage),.t.)} )
       ENDIF
       Return .T.
    }
+
+   INIT STYLE oStyleN COLORS "#255779","#A6C0CD" ORIENT 1 CORNERS 8
+   INIT STYLE oStyleP COLORS "#255779","#A6C0CD" ORIENT 6 CORNERS 8
 
    INIT WINDOW oWnd TITLE "Photo" ON EXIT bExit
 
@@ -67,6 +70,7 @@ STATIC Function Photo()
 
    BUTTON oBtn1 TEXT "Take photo" SIZE MATCH_PARENT, WRAP_CONTENT ;
          ON CLICK {||takePhoto(oImage)}
+   oBtn1:oStyle := { oStyleN,,oStyleP }
    oBtn1:nMarginL := oBtn1:nMarginR := 12
    oBtn1:nMarginT := 4
    oBtn1:nMarginB := 2
@@ -110,5 +114,64 @@ STATIC FUNCTION LoginDlg()
    BUTTON oBtnNo TEXT "Cancel"
 
    ACTIVATE DIALOG oDlg
+
+   RETURN Nil
+
+STATIC FUNCTION ExtMod()
+
+   STATIC lRead := .F.
+   PUBLIC th_aData := {"",""}, hrbHandle, hf
+
+   IF !lRead
+      hd_Progress( @thfunc2(), "Loading Hrb", "Wait...", {||DoMod()}, th_aData )
+      lRead := .T.
+   ELSE
+      DoMod()
+   ENDIF
+
+   RETURN Nil
+
+STATIC FUNCTION DoMod()
+
+   IF !Empty( m->th_aData[1] )
+      hd_toast( m->th_aData[1] )
+      m->th_aData[1] := ""
+   ELSE
+      IF !Empty( m->th_aData[2] )
+         m->hrbHandle := hb_hrbLoad( 4, m->th_aData[2] )
+         m->th_aData[2] := ""
+         IF !Empty( m->hrbHandle )
+            m->hf := hb_hrbGetFunsym( m->hrbHandle, "FMODULE" )
+         ELSE
+            hd_toast( "Can't load module" )
+         ENDIF
+      ENDIF
+      IF Empty( m->hf )
+         hd_toast( "Try next time" )
+      ELSE
+         DO( m->hf )
+      ENDIF
+   ENDIF
+
+   RETURN Nil
+
+STATIC FUNCTION thfunc2( oTimer, th_aData )
+
+   LOCAL oHttp
+
+   oHttp := TIPClientHTTP():new( "http://www.kresin.ru/down/android/hddemo_mod.hrb" )
+   oHttp:nConnTimeout := 20000
+
+   IF ! oHttp:open()
+      th_aData[1] := "Connection error:" + Chr(10) + oHttp:lastErrorMessage()
+   ELSE
+      th_aData[2] := oHttp:readAll()
+      IF Empty( th_aData[2] )
+         th_aData[1] := "Read error" + Chr(10) + oHttp:lastErrorMessage()
+      ENDIF
+      oHttp:close()
+   ENDIF
+
+   hd_ThreadClosed( oTimer )
 
    RETURN Nil
