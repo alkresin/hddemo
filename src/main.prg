@@ -3,12 +3,15 @@
 
 FUNCTION HDroidMain( lFirst )
 
-   LOCAL oWnd, oLayV, oBrw
+   LOCAL oWnd, oLayV, oBrw, oStyleN, oStyleP
    LOCAL aSamples := { ;
       { " Calculator", {||Calcul()} }, { " Dbf Browse", {||dbfBrowse()} }, ;
       { " Progress dialog", {||pdDialog()} }, { " Photo", {||Photo()} }, ;
       { " Login  dialog", {||LoginDlg()} }, { " External hrb module", {||ExtMod()} } ;
    }
+
+   INIT STYLE oStyleN COLORS "#255779","#A6C0CD" ORIENT 1 CORNERS 8
+   INIT STYLE oStyleP COLORS "#255779","#A6C0CD" ORIENT 6 CORNERS 8
 
    INIT WINDOW oWnd TITLE "HDroidGUI Demo"
 
@@ -19,10 +22,12 @@ FUNCTION HDroidMain( lFirst )
    BEGIN LAYOUT oLayV SIZE MATCH_PARENT,MATCH_PARENT
 
    BROWSE oBrw ARRAY aSamples SIZE MATCH_PARENT, MATCH_PARENT ;
-      ON CLICK {|o|Eval(o:data[o:nCurrent,2])}
+      BACKCOLOR "#C7C7C7" ON CLICK {|o|Eval(o:data[o:nCurrent,2])}
+   oBrw:rowTColor := "#FFFFFF"
 
    oBrw:nRowHeight := 60
-   oBrw:AddColumn( HDColumn():New( {|o|o:data[o:nCurrent,1]},0 ) )
+   oBrw:oRowStyle := {oStyleN,, oStyleP}
+   oBrw:AddColumn( HDColumn():New( {|o|o:data[o:nCurrent,1]},0,,,ALIGN_CENTER+ALIGN_VCENTER ) )
 
    END LAYOUT oLayV
 
