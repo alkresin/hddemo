@@ -1,4 +1,8 @@
 
+2015-04-03 15:18 UTC+0300 Alexander Kresin <alex@belacy.ru>
+  * src/main.prg
+    * Title bar is hidden, styled TextView is used instead
+
 2015-04-03 13:25 UTC+0300 Alexander Kresin <alex@belacy.ru>
   * src/main.prg
     * Added style for the main browse

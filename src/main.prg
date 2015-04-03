@@ -3,7 +3,7 @@
 
 FUNCTION HDroidMain( lFirst )
 
-   LOCAL oWnd, oLayV, oBrw, oStyleN, oStyleP
+   LOCAL oWnd, oLayV, oText0, oBrw, oStyleN, oStyleP, oFont
    LOCAL aSamples := { ;
       { " Calculator", {||Calcul()} }, { " Dbf Browse", {||dbfBrowse()} }, ;
       { " Progress dialog", {||pdDialog()} }, { " Photo", {||Photo()} }, ;
@@ -13,7 +13,7 @@ FUNCTION HDroidMain( lFirst )
    INIT STYLE oStyleN COLORS "#255779","#A6C0CD" ORIENT 1 CORNERS 8
    INIT STYLE oStyleP COLORS "#255779","#A6C0CD" ORIENT 6 CORNERS 8
 
-   INIT WINDOW oWnd TITLE "HDroidGUI Demo"
+   INIT WINDOW oWnd
 
    MENU
       MENUITEM "Exit" ACTION hd_MsgYesNo( "Really exit?", {|o|Iif(o:nres==1,hd_calljava_s_v("exit:"),.t.)} )
@@ -21,9 +21,14 @@ FUNCTION HDroidMain( lFirst )
 
    BEGIN LAYOUT oLayV SIZE MATCH_PARENT,MATCH_PARENT
 
+   TEXTVIEW oText0 TEXT "HDroidGUI Demo" TEXTCOLOR "#FFD700" BACKCOLOR "#255779" SIZE MATCH_PARENT,32
+   oText0:nAlign := ALIGN_VCENTER
+   oText0:nPaddL := 10
+
+   PREPARE FONT oFont HEIGHT 18 STYLE FONT_BOLD
    BROWSE oBrw ARRAY aSamples SIZE MATCH_PARENT, MATCH_PARENT ;
-      BACKCOLOR "#C7C7C7" ON CLICK {|o|Eval(o:data[o:nCurrent,2])}
-   oBrw:rowTColor := "#FFFFFF"
+      BACKCOLOR "#C7C7C7" FONT oFont ON CLICK {|o|Eval(o:data[o:nCurrent,2])}
+   oBrw:rowTColor := "#C7C7C7" //"#FFD700"
 
    oBrw:nRowHeight := 60
    oBrw:oRowStyle := {oStyleN,, oStyleP}
