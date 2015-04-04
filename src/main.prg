@@ -6,6 +6,7 @@ FUNCTION HDroidMain( lFirst )
    LOCAL oWnd, oLayV, oText0, oBrw, oStyleN, oStyleP, oFont
    LOCAL aSamples := { ;
       { " Calculator", {||Calcul()} }, { " Dbf Browse", {||dbfBrowse()} }, ;
+      { " Browse with checkboxes", {||ArrBrowse()} }, ;
       { " Progress dialog", {||pdDialog()} }, { " Photo", {||Photo()} }, ;
       { " Login  dialog", {||LoginDlg()} }, { " External hrb module", {||ExtMod()} } ;
    }
@@ -29,6 +30,7 @@ FUNCTION HDroidMain( lFirst )
    BROWSE oBrw ARRAY aSamples SIZE MATCH_PARENT, MATCH_PARENT ;
       BACKCOLOR "#C7C7C7" FONT oFont ON CLICK {|o|Eval(o:data[o:nCurrent,2])}
    oBrw:rowTColor := "#C7C7C7" //"#FFD700"
+   oBrw:bLong := {||hd_wrlog("long")}
 
    oBrw:nRowHeight := 60
    oBrw:oRowStyle := {oStyleN,, oStyleP}

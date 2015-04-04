@@ -1,4 +1,12 @@
 
+2015-04-04 17:50 UTC+0300 Alexander Kresin <alex@belacy.ru>
+  + browse.prg
+  - dbbrw.prg
+    * file renamed, added arrbrowse() function
+  * src/main.prg
+  * AndroidManifest.xml
+    * Version changed to 1.1
+
 2015-04-03 15:18 UTC+0300 Alexander Kresin <alex@belacy.ru>
   * src/main.prg
     * Title bar is hidden, styled TextView is used instead

@@ -1,11 +1,11 @@
 @call setenv
 @call clear
 
-@%HRB_BIN%\harbour src\main.prg src\calc.prg src\dbbrw.prg /q /i%HDROIDGUI%\src\include /i%HRB_INC% /ojni\
+@%HRB_BIN%\harbour src\main.prg src\calc.prg src\browse.prg /q /i%HDROIDGUI%\src\include /i%HRB_INC% /ojni\
 @if errorlevel 1 goto end
 
 @set NDK_LIBS_OUT=lib
-@set SRC_FILES=main.c calc.c dbbrw.c
+@set SRC_FILES=main.c calc.c browse.c
 %NDK_HOME%\prebuilt\windows\bin\make.exe -f %NDK_HOME%/build/core/build-local.mk %* >a1.out 2>a2.out
 @if exist lib\armeabi\libh4droid.so goto comp
 @echo Errors while compiling C sources

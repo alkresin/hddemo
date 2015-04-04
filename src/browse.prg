@@ -130,3 +130,34 @@ STATIC FUNCTION CleanForm( oEdit1, oEdit2, oEdit3, oEdit4 )
    oEdit4:SetText( "" )
 
    RETURN NIL
+
+
+FUNCTION ArrBrowse()
+
+   LOCAL oWnd, oLayV, oBrw, arrc
+   LOCAL arr := {"Petr","Fedor","Alexander","Viktor","Nikolay","Ivan","Anton", ;
+      "Boris","Alexey","Andrey","Konstantin","Oleg","Igor","Pavel","Sergey","Mikhail","Dmitry", ;
+      "Artem","Nikita","Ilya","Vladimir","Vyacheslav","Efim","Lev","Roman","Semen","Miron","Matvey","Leonid"}
+   arrc := Array( Len(arr) )
+   AFill( arrc,.F. )
+
+   INIT WINDOW oWnd TITLE "Browse with checkboxes"
+
+   MENU
+      MENUITEM "Exit" ACTION hd_MsgYesNo( "Really exit?", {|o|Iif(o:nres==1,hd_calljava_s_v("exit:"),.t.)} )
+   ENDMENU
+
+   BEGIN LAYOUT oLayV SIZE MATCH_PARENT,MATCH_PARENT
+
+   BROWSE oBrw ARRAY arr SIZE MATCH_PARENT, MATCH_PARENT
+
+   oBrw:nRowHeight := 40
+   oBrw:AddColumn( HDColumn():New( {|o,nc,nr,v|Iif(v!=Nil,arrc[nr]:=v, Iif(arrc[o:nCurrent],"1","0"))},60 ) )
+   oBrw:aColumns[1]:lBool := .T.
+   oBrw:AddColumn( HDColumn():New( {|o|o:data[o:nCurrent]},140,,,ALIGN_CENTER+ALIGN_VCENTER ) )
+
+   END LAYOUT oLayV
+
+   ACTIVATE WINDOW oWnd
+
+   RETURN Nil
