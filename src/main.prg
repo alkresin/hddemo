@@ -19,6 +19,7 @@ FUNCTION HDroidMain( lFirst )
    MENU
       MENUITEM "Exit" ACTION hd_MsgYesNo( "Really exit?", {|o|Iif(o:nres==1,hd_calljava_s_v("exit:"),.t.)} )
    ENDMENU
+   oWnd:bBack := {|| hd_MsgYesNo( "Exit program?", {|o|Iif(o:nres==1,hd_calljava_s_v("finish:"),.t.)} ) }
 
    BEGIN LAYOUT oLayV SIZE MATCH_PARENT,MATCH_PARENT
 

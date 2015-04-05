@@ -92,18 +92,18 @@ STATIC FUNCTION EditRec( oBrw,lNew )
 
       oLayH:nPaddB := 20
       oLayH:nAlign := ALIGN_BOTTOM
-      BUTTON oBtn1 TEXT Iif( lNew, "Add&Close", "Update" ) SIZE 0, 56 ;
+      BUTTON oBtn1 TEXT Iif( lNew, "Add&Close", "Update" ) SIZE 0, 44 ;
             ON CLICK {||Addrec(oBrw,nRec,oEdit1,oEdit2,oEdit3,oEdit4),Iif(lNew,oBrw:Refresh(),oBrw:RefreshRow()),hd_calljava_s_v("finish:")}
       oBtn1:oStyle := aStyle
       oBtn1:nMarginL := oBtn1:nMarginR := 8
 
       IF lNew
-         BUTTON oBtn2 TEXT "Add" SIZE 0, 56 ;
+         BUTTON oBtn2 TEXT "Add" SIZE 0, 44 ;
                ON CLICK {||Addrec(oBrw,0,oEdit1,oEdit2,oEdit3,oEdit4),CleanForm(oEdit1,oEdit2,oEdit3,oEdit4),lUpd := .T.}
          oBtn2:oStyle := aStyle
       ENDIF
 
-      BUTTON oBtn3 TEXT "Close" SIZE 0, 56 ;
+      BUTTON oBtn3 TEXT "Close" SIZE 0, 44 ;
             ON CLICK {||Iif(lUpd,oBrw:Refresh(),.F.),hd_calljava_s_v("finish:")}
       oBtn3:oStyle := aStyle
       oBtn3:nMarginL := oBtn3:nMarginR := 8

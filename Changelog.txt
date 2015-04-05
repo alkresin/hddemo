@@ -1,4 +1,8 @@
 
+2015-04-05 11:46 UTC+0300 Alexander Kresin <alex@belacy.ru>
+  * src/main.prg
+    * Added "Back" key handling
+
 2015-04-05 10:14 UTC+0300 Alexander Kresin <alex@belacy.ru>
   * browse.prg
   * src/main.prg
