@@ -1,4 +1,9 @@
 
+2015-04-05 10:14 UTC+0300 Alexander Kresin <alex@belacy.ru>
+  * browse.prg
+  * src/main.prg
+    * Styles changed
+
 2015-04-04 17:50 UTC+0300 Alexander Kresin <alex@belacy.ru>
   + browse.prg
   - dbbrw.prg

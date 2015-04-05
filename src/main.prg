@@ -26,13 +26,12 @@ FUNCTION HDroidMain( lFirst )
    oText0:nAlign := ALIGN_VCENTER
    oText0:nPaddL := 10
 
-   PREPARE FONT oFont HEIGHT 18 STYLE FONT_BOLD
+   PREPARE FONT oFont HEIGHT 18 // STYLE FONT_BOLD
    BROWSE oBrw ARRAY aSamples SIZE MATCH_PARENT, MATCH_PARENT ;
       BACKCOLOR "#C7C7C7" FONT oFont ON CLICK {|o|Eval(o:data[o:nCurrent,2])}
-   oBrw:rowTColor := "#C7C7C7" //"#FFD700"
-   oBrw:bLong := {||hd_wrlog("long")}
+   oBrw:rowTColor := 0 //"#C7C7C7" //"#FFD700"
 
-   oBrw:nRowHeight := 60
+   oBrw:nRowHeight := 56
    oBrw:oRowStyle := {oStyleN,, oStyleP}
    oBrw:AddColumn( HDColumn():New( {|o|o:data[o:nCurrent,1]},0,,,ALIGN_CENTER+ALIGN_VCENTER ) )
 
