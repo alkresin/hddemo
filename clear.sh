@@ -4,8 +4,10 @@
 
 rm -f src/$PACKAGE_PATH/R.java
 rm -f assets/*
-rm -f bin/*
 rm -f *.out
+rm -f -r bin
+mkdir bin
+chmod a+w+r+x bin
 rm -f -r lib
 mkdir lib
 chmod a+w+r+x lib
