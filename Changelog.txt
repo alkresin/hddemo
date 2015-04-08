@@ -1,4 +1,11 @@
 
+2015-04-08 15:14 UTC+0300 Alexander Kresin <alex@belacy.ru>
+  * src/main.prg
+    * Added new demo module - "Set hrb name", which allows
+      to input and save in hddemo.ini file the address and the name
+      of hrb file, which should be downloaded and executed
+      via the "External hrb module"
+
 2015-04-06 12:30 UTC+0300 Alexander Kresin <alex@belacy.ru>
   * clear.bat
   * clear.sh

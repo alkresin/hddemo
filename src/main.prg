@@ -8,7 +8,8 @@ FUNCTION HDroidMain( lFirst )
       { " Calculator", {||Calcul()} }, { " Dbf Browse", {||dbfBrowse()} }, ;
       { " Browse with checkboxes", {||ArrBrowse()} }, ;
       { " Progress dialog", {||pdDialog()} }, { " Photo", {||Photo()} }, ;
-      { " Login  dialog", {||LoginDlg()} }, { " External hrb module", {||ExtMod()} } ;
+      { " Login  dialog", {||LoginDlg()} }, { " Set hrb name", {||SetMod()} }, ;
+      { " External hrb module", {||ExtMod()} } ;
    }
 
    INIT STYLE oStyleN COLORS "#255779","#A6C0CD" ORIENT 1 CORNERS 8
@@ -129,14 +130,97 @@ STATIC FUNCTION LoginDlg()
 
    RETURN Nil
 
+STATIC FUNCTION SetMod()
+
+   LOCAL oDlg, oEdit1, oEdit2, oBtnYes, oBtnNo
+   LOCAL cIniName := hd_HomeDir() + "hddemo.ini", hIni, csName := "HRBMOD"
+   LOCAL cSection, aSect, cKey
+   LOCAL cAddr := "http://kresin.ru/down/android/", cName := "hddemo_mod.hrb"
+   LOCAL lSectExi := .F.
+
+   LOCAL bExit := {|o|
+      IF o:nRes == 1
+         hIni[ csName ][ "addr" ] := o:aRes[1]
+         hIni[ csName ][ "name" ] := o:aRes[2]
+         hb_iniWrite( cIniName, hIni,,, .F. )
+         hd_toast( "Saved in hddemo.ini" )
+      ENDIF
+      Return .T.
+   }
+
+   hIni := hb_iniRead( cIniName )
+   IF Empty( hIni )
+      hIni := hb_IniNew( cIniName )
+   ENDIF
+
+   FOR EACH cSection IN hIni:Keys
+      IF Upper( cSection ) == csName
+         lSectExi := .T.
+         aSect := hIni[ cSection ]
+         FOR EACH cKey IN aSect:Keys
+            IF Lower( cKey ) == "addr"
+               cAddr := aSect[ cKey ]
+            ELSEIF Lower( cKey ) == "name"
+               cName := aSect[ cKey ]
+            ENDIF
+         NEXT
+         EXIT
+      ENDIF
+   NEXT
+
+   IF !lSectExi
+      hIni[ csName ] := { => }
+   ENDIF
+
+   INIT DIALOG oDlg TITLE "Hrb module" ON EXIT bExit
+
+   EDITBOX oEdit1 HINT "Address" TEXT cAddr
+   EDITBOX oEdit2 HINT "Name" TEXT cName
+
+   BUTTON oBtnYes TEXT "Ok"
+   BUTTON oBtnNo TEXT "Cancel"
+
+   ACTIVATE DIALOG oDlg
+
+   RETURN Nil
+
 STATIC FUNCTION ExtMod()
 
-   STATIC lRead := .F.
-   PUBLIC th_aData := {"",""}, hrbHandle, hf
+   LOCAL cIniName := hd_HomeDir() + "hddemo.ini", hIni, csName := "HRBMOD"
+   LOCAL cSection, aSect, cKey
 
-   IF !lRead
+   STATIC cAddr := "http://kresin.ru/down/android/", cName := "hddemo_mod.hrb"
+   PUBLIC th_aData := {"","","",""}, hrbHandle, hf
+
+   th_aData[3] := cAddr
+   th_aData[4] := cName
+   hIni := hb_iniRead( cIniName )
+   IF !Empty( hIni )
+      FOR EACH cSection IN hIni:Keys
+         IF Upper( cSection ) == csName
+            aSect := hIni[ cSection ]
+            FOR EACH cKey IN aSect:Keys
+               IF Lower( cKey ) == "addr"
+                  th_aData[3] := aSect[ cKey ]
+                  IF Right( th_aData[3],1 ) != "/"
+                     th_aData[3] += "/"
+                  ENDIF
+               ELSEIF Lower( cKey ) == "name"
+                  th_aData[4] := aSect[ cKey ]
+               ENDIF
+            NEXT
+            EXIT
+         ENDIF
+      NEXT
+   ENDIF
+
+   IF !( cAddr == th_aData[3] ) .OR. !( cName == th_aData[4] ) .OR. Empty( m->hf )
+      IF !Empty( m->hrbHandle )
+         hb_hrbUnload( m->hrbHandle )
+      ENDIF
       hd_Progress( @thfunc2(), "Loading Hrb", "Wait...", {||DoMod()}, th_aData )
-      lRead := .T.
+      cAddr := th_aData[3]
+      cName := th_aData[4]
    ELSE
       DoMod()
    ENDIF
@@ -150,6 +234,10 @@ STATIC FUNCTION DoMod()
       m->th_aData[1] := ""
    ELSE
       IF !Empty( m->th_aData[2] )
+         IF !( Asc( m->th_aData[2] ) ) == 192 .OR. !( Substr( m->th_aData[2],2,3 ) == "HRB" )
+            hd_toast( "Hrb is absent or broken" )
+            RETURN Nil
+         ENDIF
          m->hrbHandle := hb_hrbLoad( 4, m->th_aData[2] )
          m->th_aData[2] := ""
          IF !Empty( m->hrbHandle )
@@ -171,7 +259,7 @@ STATIC FUNCTION thfunc2( oTimer, th_aData )
 
    LOCAL oHttp
 
-   oHttp := TIPClientHTTP():new( "http://www.kresin.ru/down/android/hddemo_mod.hrb" )
+   oHttp := TIPClientHTTP():new( th_aData[3]+th_aData[4] )
    oHttp:nConnTimeout := 20000
 
    IF ! oHttp:open()
