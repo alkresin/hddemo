@@ -71,7 +71,7 @@ STATIC Function Photo()
    INIT STYLE oStyleN COLORS "#255779","#A6C0CD" ORIENT 1 CORNERS 8
    INIT STYLE oStyleP COLORS "#255779","#A6C0CD" ORIENT 6 CORNERS 8
 
-   INIT WINDOW oWnd TITLE "Photo" ON EXIT bExit
+   INIT WINDOW oWnd TITLE "Photo" // ON EXIT bExit
 
    MENU
       MENUITEM "Exit" ACTION hd_calljava_s_v("finish:")

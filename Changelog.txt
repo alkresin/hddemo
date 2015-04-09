@@ -1,4 +1,9 @@
 
+2015-04-09 21:00 UTC+0300 Alexander Kresin <alex@belacy.ru>
+  * src/main.prg
+    * ON EXIT commented in Photo() function - calling of a dialog
+      caused application crash after screen rotation
+
 2015-04-08 15:14 UTC+0300 Alexander Kresin <alex@belacy.ru>
   * src/main.prg
     * Added new demo module - "Set hrb name", which allows
