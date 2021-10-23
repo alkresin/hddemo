@@ -1,4 +1,6 @@
 
+2021-10-22 21:00 UTC+0300 Alexander Kresin <alex@belacy.ru>
+
 2015-04-09 21:00 UTC+0300 Alexander Kresin <alex@belacy.ru>
   * src/main.prg
     * ON EXIT commented in Photo() function - calling of a dialog
